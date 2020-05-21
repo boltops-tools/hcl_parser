@@ -11,6 +11,9 @@ module HclVariables
       Rhcl.parse(code)
     end
 
+    # The parser being used cannot handle unquoted literal type values and comments.
+    # Hacking it and updating the raw code as a workaround.
+    # May have to fix the parser or write a new parser.
     def code
       return @code if @code
       @code = fix_quotes(@raw)
@@ -44,11 +47,16 @@ module HclVariables
       return l unless l =~ /type\s*=/ # just check for type
       return l if l =~ /type\s*=\s*['"]([a-zA-Z0-9()]+)["']/ # check quotes in the type value
 
-      # Reaching here means there's a type value without quotes
-      # capture unquoted value so we can add quotes
+      # Reaching here means there is probably a type value without quotes
+      # Try to capture unquoted value so we can add quotes
       md = l.match(/type\s*=\s*([a-zA-Z0-9()]+)/)
-      value = md[1]
-      %Q|type = "#{value}"|
+      if md
+        value = md[1]
+        %Q|type = "#{value}"|
+      else
+        # Example: type = "list(object({
+        l # unable to capture quotes, passthrough as fallback
+      end
     end
   end
 end

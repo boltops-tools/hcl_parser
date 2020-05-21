@@ -53,4 +53,13 @@ RSpec.describe HclVariables::Parser do
       expect(result).to be_a(Hash)
     end
   end
+
+  # Spec documents the bad behavior we want to remove.
+  # Will have to either fix the parser being used or write a new parser.
+  context "bad/list_object_multiline.tf" do
+    let(:raw) { fixture("bad/list_object_multiline.tf") }
+    it "load" do
+      expect { parser.load }.to raise_error(Racc::ParseError)
+    end
+  end
 end
