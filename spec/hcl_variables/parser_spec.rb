@@ -62,4 +62,11 @@ RSpec.describe HclVariables::Parser do
       expect { parser.load }.to raise_error(Racc::ParseError)
     end
   end
+
+  context "bad/map_object.tf" do
+    let(:raw) { fixture("bad/map_object.tf") }
+    it "load" do
+      expect { parser.load }.to raise_error(Racc::ParseError)
+    end
+  end
 end

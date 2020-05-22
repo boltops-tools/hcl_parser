@@ -17,19 +17,20 @@ module HclVariables
     def code
       return @code if @code
       @code = fix_quotes(@raw)
-      @code = remove_comments(@code)
     end
 
     def empty?
-      lines = code.split("\n")
+      text = remove_comments(code)
+      lines = text.split("\n")
       lines.reject! { |l| l.strip.empty? }
       lines.empty?
     end
 
+    COMMENT_REGEX = /^(^|\s)#/i
     def remove_comments(raw)
       lines = raw.split("\n")
       # filter out commented lines
-      lines.reject! { |l| l =~ /(^|\s)#/i }
+      lines.reject! { |l| l =~ COMMENT_REGEX }
       # filter out empty lines
       lines.reject! { |l| l.strip.empty? }
       lines.join("\n")
@@ -44,6 +45,7 @@ module HclVariables
     end
 
     def quote_line(l)
+      return l if l =~ COMMENT_REGEX
       return l unless l =~ /type\s*=/ # just check for type
       return l if l =~ /type\s*=\s*['"]([a-zA-Z0-9()]+)["']/ # check quotes in the type value
 

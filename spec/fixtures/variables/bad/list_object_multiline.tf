@@ -1,3 +1,4 @@
+# https://www.terraform.io/docs/configuration/variables.html
 
 variable "docker_ports" {
   type = "list(object({
