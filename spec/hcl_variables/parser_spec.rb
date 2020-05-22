@@ -54,6 +54,14 @@ RSpec.describe HclVariables::Parser do
     end
   end
 
+  context "with_comments.tf" do
+    let(:raw) { fixture("with_comments.tf") }
+    it "load" do
+      result = parser.load
+      expect(result).to be_a(Hash)
+    end
+  end
+
   # Spec documents the bad behavior we want to remove.
   # Will have to either fix the parser being used or write a new parser.
   context "bad/list_object_multiline.tf" do

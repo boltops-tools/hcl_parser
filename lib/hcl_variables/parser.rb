@@ -45,7 +45,7 @@ module HclVariables
     end
 
     def quote_line(l)
-      return l if l =~ COMMENT_REGEX
+      return "# " if l =~ COMMENT_REGEX # return empty comment so parser wont try to parse it
       return l unless l =~ /type\s*=/ # just check for type
       return l if l =~ /type\s*=\s*['"]([a-zA-Z0-9()]+)["']/ # check quotes in the type value
 
