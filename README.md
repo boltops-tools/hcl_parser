@@ -1,11 +1,11 @@
-# HclVariables
+# HclParser
 
-Parse HCL Variables files. The scope of this library is to only handle `variables.tf` file.
+Parse HCL files. The scope of this library is to only handle `variables.tf` and `backend.tf` files, as that's what's needed for Terraspace currently.
 
 ## Usage
 
 ```ruby
-require "hcl_variables"
+require "hcl_parser"
 code =<<EOL
 variable "project" {
   description = "The name of the GCP Project"
@@ -17,7 +17,7 @@ variable "name_prefix" {
 }
 EOL
 
-parser = HclVariables::Parser.new(code)
+parser = HclParser::Loader.new(code)
 parser.load
 # Returns =>
 #
@@ -32,12 +32,12 @@ parser.load
 ## Installation
 
 ```ruby
-gem 'hcl_variables'
+gem 'hcl_parser'
 ```
 
 ## Notes
 
-* Tried a few different Ruby HCL parsers: [hcl-checker](https://github.com/mfcastellani/hcl-checker), [hcl-rb](https://github.com/Ruin0x11/hcl-rb), [rhcl](https://github.com/winebarrel/rhcl), [ruby-hcl](https://github.com/sikula/ruby-hcl). They all seem to have one issues or another.
+* Tried a few different Ruby HCL parsers: [hcl-checker](https://github.com/mfcastellani/hcl-checker), [hcl-rb](https://github.com/Ruin0x11/hcl-rb), [rhcl](https://github.com/winebarrel/rhcl), [ruby-hcl](https://github.com/sikula/ruby-hcl). They all seem to have one issue or another.
 * This library preprocesses the text fed to the parser to workaround the parser issues. It's a workaround.
 * Able to handle simple variable types and most complex types.
 * Not able to handle multi-line complex variable types. There's a spec to document this.

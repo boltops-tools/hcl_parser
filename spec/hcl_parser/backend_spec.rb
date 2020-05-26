@@ -1,4 +1,4 @@
-RSpec.describe HclVariables::Parser do
+RSpec.describe HclParser::Loader do
   def backend(file)
     IO.read("spec/fixtures/backend/#{file}")
   end

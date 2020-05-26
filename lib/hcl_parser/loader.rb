@@ -1,7 +1,7 @@
 require "rhcl"
 
-module HclVariables
-  class Parser
+module HclParser
+  class Loader
     def initialize(raw)
       @raw = raw
     end

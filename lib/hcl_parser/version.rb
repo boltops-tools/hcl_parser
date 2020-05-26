@@ -1,3 +1,3 @@
-module HclVariables
+module HclParser
   VERSION = "0.1.0"
 end
