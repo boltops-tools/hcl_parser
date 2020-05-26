@@ -62,6 +62,14 @@ RSpec.describe HclVariables::Parser do
     end
   end
 
+  context "s3.tf" do
+    let(:raw) { fixture("s3.tf") }
+    it "load" do
+      result = parser.load
+      expect(result).to be_a(Hash)
+    end
+  end
+
   # Spec documents the bad behavior we want to remove.
   # Will have to either fix the parser being used or write a new parser.
   context "bad/list_object_multiline.tf" do

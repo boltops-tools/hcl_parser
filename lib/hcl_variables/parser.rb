@@ -46,15 +46,16 @@ module HclVariables
 
     def quote_line(l)
       return "# " if l =~ COMMENT_REGEX # return empty comment so parser wont try to parse it
-      return l unless l =~ /type\s*=/ # just check for type
-      return l if l =~ /type\s*=\s*['"]([a-zA-Z0-9()]+)["']/ # check quotes in the type value
+      return l unless l =~ /(type|default)\s*=/ # just check for type and default
+      return l if l =~ /(type|default)\s*=\s*['"]([a-zA-Z0-9()]+)["']/ # check quotes in the type value
 
       # Reaching here means there is probably a type value without quotes
       # Try to capture unquoted value so we can add quotes
-      md = l.match(/type\s*=\s*([a-zA-Z0-9()]+)/)
+      md = l.match(/(type|default)\s*=\s*([a-zA-Z0-9()]+)/)
+
       if md
-        value = md[1]
-        %Q|type = "#{value}"|
+        prop, value = md[1], md[2]
+        %Q|#{prop} = "#{value}"|
       else
         # Example: type = "list(object({
         l # unable to capture quotes, passthrough as fallback
