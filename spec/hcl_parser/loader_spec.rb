@@ -70,19 +70,33 @@ RSpec.describe HclParser::Loader do
     end
   end
 
-  # Spec documents the bad behavior we want to remove.
-  # Will have to either fix the parser being used or write a new parser.
-  context "bad/list_object_multiline.tf" do
-    let(:raw) { fixture("bad/list_object_multiline.tf") }
+  context "complex/list_object_multiline.tf" do
+    let(:raw) { fixture("complex/list_object_multiline.tf") }
     it "load" do
-      expect { parser.load }.to raise_error(Racc::ParseError)
+      result = parser.load
+      expect(result).to be_a(Hash)
     end
   end
 
-  context "bad/map_object.tf" do
-    let(:raw) { fixture("bad/map_object.tf") }
+  context "complex/map_object.tf" do
+    let(:raw) { fixture("complex/map_object.tf") }
     it "load" do
-      expect { parser.load }.to raise_error(Racc::ParseError)
+      result = parser.load
+      expect(result).to be_a(Hash)
+    end
+  end
+
+  context "complex/object.tf" do
+    let(:raw) { fixture("complex/object.tf") }
+    it "load" do
+      result = parser.load
+      expect(result).to be_a(Hash)
+      expect(result).to eq(
+        {"variable"=>
+          {"service_account"=>{"default"=>"null"},
+           "foo"=>{"default"=>"bar", "type"=>"string"},
+           "networks"=>{}}}
+      )
     end
   end
 end
