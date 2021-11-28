@@ -95,8 +95,17 @@ RSpec.describe HclParser::Loader do
         {"variable"=>
           {"service_account"=>{"default"=>"null"},
            "foo"=>{"default"=>"bar", "type"=>"string"},
-           "networks"=>{}}}
+           "networks"=>{"default"=>"any"}}}
       )
+    end
+  end
+
+  context "complex/any.tf" do
+    let(:raw) { fixture("complex/any.tf") }
+    it "load" do
+      result = parser.load
+      expect(result).to be_a(Hash)
+      expect(result).to eq({"variable"=>{"subnets"=>{"default"=>"any"}}})
     end
   end
 end

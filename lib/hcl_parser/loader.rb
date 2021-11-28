@@ -32,14 +32,14 @@ module HclParser
       lines.each_with_index do |l,i|
         # We dont rewrite lines until the next line/iteration
         # This is actually the next iteration since we set rewrite_lines = true previously
-        # in rewrite_lines = has_complex_type?(lookahead_lines)
+        # in rewrite_lines = complex_type_lines?(lookahead_lines)
         if rewrite_lines
-          if simple_default_assignment?(l)
-            results << l
-          elsif simple_default_assignment?(l)
+          if complex_type_line?(l)
             # Doesnt matter what the default value is as long as there is one
             # Doing this in case the default value spans multiple lines
             results << '  default = "any"'
+          elsif simple_default_assignment?(l)
+            results << l
           else
             results << "# #{l}"
           end
@@ -54,7 +54,7 @@ module HclParser
           variable_start_index = i
           variable_end_index = variable_end_index(lines, variable_start_index)
           lookahead_lines = lines[variable_start_index..variable_end_index]
-          rewrite_lines = has_complex_type?(lookahead_lines)
+          rewrite_lines = complex_type_lines?(lookahead_lines)
         end
 
         # Disable rewriting before reaching the end of the variable definition so: i + 1
@@ -72,10 +72,14 @@ module HclParser
       line.match(/default\s*=\s*("|'|null)/)
     end
 
-    def has_complex_type?(lines)
+    def complex_type_lines?(lines)
       !!lines.find do |l|
-        l.match(/object\(/)
+        complex_type_line?(l)
       end
+    end
+
+    def complex_type_line?(l)
+      l.match(/object\(/) || l.match(/=\s*"any/)
     end
 
     def variable_end_index(lines, variable_start_index)
