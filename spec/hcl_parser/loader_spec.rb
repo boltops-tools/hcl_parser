@@ -22,6 +22,14 @@ RSpec.describe HclParser::Loader do
     end
   end
 
+  context "single_line.tf" do
+    let(:raw) { fixture("single_line.tf") }
+    it "load" do
+      result = parser.load
+      expect(result).to be_a(Hash)
+    end
+  end
+
   context "empty.tf" do
     let(:raw) { fixture("empty.tf") }
     it "load" do
