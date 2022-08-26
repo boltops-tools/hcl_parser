@@ -83,10 +83,9 @@ module HclParser
     end
 
     def variable_end_index(lines, variable_start_index)
-      end_variable_index = nil
       lines.each_with_index do |l,i|
-        next unless i > variable_start_index
-        return i if l.match(/^}/)
+        next unless i >= variable_start_index
+        return i if l.match(/^}/) || l.match(/{\s*}/)
       end
     end
 
